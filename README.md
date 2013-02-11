@@ -2,4 +2,4 @@ testrepo
 ========
 Hello World!
 
-Local
+Remote
