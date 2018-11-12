@@ -1,0 +1,116 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 Helvetica-Oblique;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\margl1440\margr1440\vieww25400\viewh16000\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs36 \cf0 Spring Class Notes\
+\
+@Component is used for Beans and defaults to the singleton scope\
+@Autowired defines dependencies of a Bean\
+@Scope allows you to define a Bean as a prototype (multiple instances) using the ConfigurableBeanFactory.
+\f1\i SCOPE_PROTOTYPE\
+
+\f0\i0 When you want a singleton Bean to use different instances of a dependency you need to further quality @Scope with a proxy by using proxyMode = ScopedProxyMode.
+\f1\i TARGET_CLASS\
+
+\f0\i0 singleton in Spring refers to a single instance per Application Context\
+@ComponentScan(\'93package\'94) is required if the Bean you want to use is in a package that is different than the Bean\'92s package
+\f1\i \
+
+\f0\i0 @PostConstruct is called once the Beam is created.  Must include public void postConstruct()\
+@PreDestroy is called as a Bean is being destroyed.  The method can be any name, ex. destroy()\
+CDI (Container and Dependency Injection) is a JEE Interface standard to Spring similar to JPA is an Interface to Hibernate that defines how to use annotations\
+CDI annotations include @Inject, @Named, and @Singleton.  @Inject ~ Autowired, @Named ~ Component, Qualifier\
+To use CDI you need to add a dependency to your pom\
+Removing Spring Boot and replacing with core Spring\
+@SpringBootApplication is replaced by @Configuration\
+Creating an Application Context in Spring Boot uses SpringApplication.run(class, args)\
+Creating an Application Context in core Spring uses ACAC, ApplicationConfigApplicationContext(class)\
+Spring Boot includes the component scan as part of the startup but in core Spring you need to explicitly add @ComponentScan with or without the base package\
+AnnotationConfigApplicationContext needs to be within a try (since AnnotationConfigApplicationContext implements autoclosable) or needs to have a .close() at the end\
+logback-classic is an implementation of the slf4j-api that needs to be in your pom\
+You can autowire a dependency in the applicationContext.xml using a property tag, name and ref where ref refers to the dependent bean, inside of a bean\
+AnnotationConfigApplicationContext is for Java application contexts\
+ClassPathXmlApplicationContext is for XML application contexts\
+Casting the getBeanDefinitionNames() array to an (Object) allows the Logger to print all of the values in the array\
+You can automatically find beans in your codebase by adding a context:component-scan to the applicationContext.xml, this includes adding the context namespace\
+\pard\pardeftab720\sl280\partightenfactor0
+\cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Disambiguation refers to the removal of ambiguity by making something clear. Disambiguation narrows down the meaning of words and it's a good thing. This word makes sense if you break it down. Dis means "not," ambiguous means "unclear," and the ending -tion makes it a noun.\cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Inversion of Control is a principle in software engineering by which the control of objects or portions of a program is transferred to a container or framework. It's most often used in the context of object-oriented programming.\
+Spring has two implementations of the IoC Container; Application Context and Bean Factory\
+Application Context is BeanFactory++, and includes additional features; Spring\'92s AOP Features, I18n (Internationalization) Capabilities, WebApplicationContext\
+Spring suggests using Application Context in all cases except when memory is at a premium, such as in an IoT device\
+@Component is generic and can be used to represent all components\
+@Controller is used to define a controller in the Web layer, as in Spring MVC\
+\pard\pardeftab720\sl280\partightenfactor0
+\cf2 \outl0\strokewidth0 @Service is used in the Business layer\cf2 \outl0\strokewidth0 \strokec2 \
+\pard\pardeftab720\sl280\partightenfactor0
+\cf2 @Repository is use in the Data layer\
+Using the different component types allows you to set default behavior, for example Spring has a default Exception Translation Facility for the @Repository component type to help deal with JDBC exceptions\
+@Value allows you to read a value from a property file, ex. @Value(\'93$\{external.service.url\}\'94) by defining the @PropertySource value, ex. @PropertySource(\'93classpath:app.properties\'94)\
+You can move the properties file outside of the resources folder so you can have different properties for different envs that are defined in your classpath\
+Importing the JUnit assert methods statically allows you to call the method directly without typing Assert.assertEquals\
+Some important JUnit annotations are @Test, @Before, @After, @BeforeClass, @AfterClass\
+Before and After are run before and after each test\
+Before Class and After Class must be static and will run once before all tests are executed and then once at the end\
+JUnit does not guarantee that order that tests are executed\
+start.spring.io allows you to create a Spring Boot project.  This was used to create a mockito demo\
+The mock method allows you to pass a class to create a mock object\
+The when method allows you to say \'93when this method is called\'94 thenReturn \'93return this\'94, ex. when(dataServiceMock.returnValues()).thenReturn(new int[] \{24, 3, 15\});\
+You can add additional return values for subsequent calls by adding additional .thenReturn values to the mock, ex. when(listMock.size()).thenReturn(10).thenReturn(20)\
+@Mock allows you to create a mock object\
+@InjectMocks allows you to inject dependencies into that mock object\
+To leverage @Mock and @InjectMocks in your JUnit test, you need to include the @RunWith(MockitoJUnitRunner.class) annotation in your Test class\
+You can also call methods with parameters by mocking the response, ex. when(list.get(0)).thenReturn(\'93Some String\'94), calling list.get(1) returns null\
+You can use Mockito helpers for parameters, ex. Mockito.anyInt() can be use to return a value when any integer is passed\
+You can also use Spring Test to help manage/run unit tests\
+Spring Test for Java config requires @RunWith(SpringRunner.class) and @ContextConfiguration(classes=<YourJavaConfigFile>.class)\
+To use an XML application context, you use the locations attribute in the @ContextConfiguration instead of classes, ex. (locations=\'93/applicationContext.xml\'94)\
+You can create a test version of the applicationContext by adding a new xml file to the test/resources folder and including an import statement, ex. <import resource=\'93classpath:applicationContext.xml\'94/>.  This allows you to override things like a bean for test purposes\
+After specifying this config, adding the bean to the test is as easy adding the @Autowired annotation to the bean declaration\
+The test needs to have the same package as the object being tested\
+When using Mockito you don\'92t need the @ContextConfiguration and you change the @RunWith to (MockitoJUnitRunner.class)\
+To use Mockito, you create the mock beans with the @Mock annotation and you inject the dependencies using the @InjectMocks\
+GUIDANCE - Use Mockito when you can and avoid using Spring Context\
+Creating a Rest Controller in Spring Boot example was done by creating a Controller class with the @RestController annotation and an @GetMapping annotation for the return values, ex. @GetMapping(\'93/books\'94) with a public List<Book> getAllBooks() method\
+Spring Auto Configuration leverages the boot.SpringApplication to run a Spring context, ex. SpringApplication.run(ApplicationName.class, args)\
+The Spring Actuator provides information about your Spring application\
+You can add the Spring Actuator by adding the starter-actuator dependency to your POM\
+To see these metrics more easily you can add a dependency on the data-rest-hal-browser to your POM as well\
+By default, only a few metrics are provided so to get them all you need to add management.endpoints.web.exposure.include=* to your properties file\
+This is a performance hit so it should only be used in Dev\
+Changes in your code requires a server restart to be picked up which is a pain\
+To get around this, you can add a dependency to spring-boot-devtools to your POM\
+devtools restarts the server in the background when Java changes and it does it efficiently so it takes less time\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\
+\
+\
+\
+\
+
+\fs24 \
+}
